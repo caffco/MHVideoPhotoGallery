@@ -68,6 +68,11 @@
     return self.galleryItems.count;
 }
 
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	self.navigationBar.translucent = NO;
+}
+
 @end
 
 
