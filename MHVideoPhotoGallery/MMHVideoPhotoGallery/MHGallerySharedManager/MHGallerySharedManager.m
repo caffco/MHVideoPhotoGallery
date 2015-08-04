@@ -442,7 +442,7 @@
 		succeedBlock(image,[dict[URL] integerValue],nil);
 	}else{
 		NSString *videoID = [[URL componentsSeparatedByString:@"/v/"] lastObject];
-		NSString *infoURL = [NSString stringWithFormat:MHYoutubeInfoBaseURL,videoID];
+		NSString *infoURL = [NSString stringWithFormat:MHVineInfoBaseURL,videoID];
 		NSMutableURLRequest *httpRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:infoURL]
 																   cachePolicy:NSURLRequestUseProtocolCachePolicy
 															   timeoutInterval:10];
