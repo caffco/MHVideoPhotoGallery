@@ -15,6 +15,8 @@
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
+		
+		self.shouldShowVideoMeta = YES;
 
         _thumbnail = [UIImageView.alloc initWithFrame:self.bounds];
         self.thumbnail.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
