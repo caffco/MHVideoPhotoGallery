@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.platform     =  :ios
   s.source = {
     :git => 'https://github.com/caffco/MHVideoPhotoGallery.git',
-    :tag => 'v1.7.0'
+    :tag => 'v1.7.1'
   }
 
   s.dependency "SDWebImage"
