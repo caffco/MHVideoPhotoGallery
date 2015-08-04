@@ -22,4 +22,7 @@
 @property (nonatomic, strong) MHGalleryItem           *galleryItem;
 
 @property (nonatomic, copy) void (^saveImage)(BOOL shouldSave);
+
+@property (nonatomic) BOOL shouldShowVideoMeta;
+
 @end
