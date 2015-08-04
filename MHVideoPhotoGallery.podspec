@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
   }
 
   s.dependency "SDWebImage"
-  s.dependency "FLAnimated"
 
   s.frameworks = 'MessageUI','Social', 'ImageIO', 'QuartzCore', 'Accelerate','CoreMedia', 'AVFoundation','MediaPlayer'
 
