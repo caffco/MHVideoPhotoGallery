@@ -141,7 +141,8 @@
             self.toolbar.frame = CGRectMake(0, self.view.frame.size.width-44, self.view.frame.size.height, 44);
         }
     }
-    
+	
+	self.toolbar.translucent = NO;
     self.toolbar.tintColor = self.UICustomization.barButtonsTintColor;
     self.toolbar.tag = 307;
     self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin;

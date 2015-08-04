@@ -52,6 +52,8 @@ extern NSString *const MHYoutubeInfoBaseURL;
 extern NSString *const MHYoutubePlayBaseURL;
 extern NSString *const MHYoutubeBaseURL;
 extern NSString *const MHVimeoBaseURL;
+extern NSString *const MHVineInfoBaseURL;
+extern NSString *const MHVineBaseURL;
 extern NSString *const MHAssetLibrary;
 extern NSString *const MHGalleryDurationData;
 

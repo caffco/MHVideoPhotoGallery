@@ -59,6 +59,13 @@ typedef NS_ENUM(NSUInteger, MHGalleryType) {
  *
  */
 + (instancetype)itemWithVimeoVideoID:(NSString*)ID;
+/**
+ *  MHGalleryItem itemWithVineVideoID:
+ *
+ *  @param ID Example: https://vine.co/v/egFgz9bB22x - egFgz9bB22x is the ID
+ *
+ */
++ (instancetype)itemWithVineVideoID:(NSString*)ID;
 
 /**
  *  MHGalleryItem initWithImage
@@ -68,5 +75,6 @@ typedef NS_ENUM(NSUInteger, MHGalleryType) {
  */
 - (instancetype)initWithImage:(UIImage*)image;
 + (instancetype)itemWithImage:(UIImage*)image;
+
 
 @end

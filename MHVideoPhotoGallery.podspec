@@ -1,19 +1,20 @@
 Pod::Spec.new do |s|
   s.name         = 'MHVideoPhotoGallery'
-  s.version      = '1.6.7'
+  s.version      = '1.7.0'
   s.license      = 'MIT'
-  s.homepage     = 'https://github.com/mariohahn/MHVideoPhotoGallery'
+  s.homepage     = 'https://github.com/caffco/MHVideoPhotoGallery'
   s.author = {
     'Mario Hahn' => 'mario_hahn@me.com'
   }
   s.summary      = 'Gallery for iOS 7 Devices.'
   s.platform     =  :ios
   s.source = {
-    :git => 'https://github.com/mariohahn/MHVideoPhotoGallery.git',
-    :tag => 'v1.6.7'
+    :git => 'https://github.com/caffco/MHVideoPhotoGallery.git',
+    :tag => 'v1.7.0'
   }
 
   s.dependency "SDWebImage"
+  s.dependency "FLAnimated"
 
   s.frameworks = 'MessageUI','Social', 'ImageIO', 'QuartzCore', 'Accelerate','CoreMedia', 'AVFoundation','MediaPlayer'
 

@@ -29,6 +29,11 @@
                              galleryType:MHGalleryTypeVideo];
 }
 
++ (instancetype)itemWithVineVideoID:(NSString*)ID{
+	return [self.class.alloc initWithURL:[NSString stringWithFormat:MHVineBaseURL,ID]
+							 galleryType:MHGalleryTypeVideo];
+}
+
 +(instancetype)itemWithURL:(NSString *)URLString
                galleryType:(MHGalleryType)galleryType{
     

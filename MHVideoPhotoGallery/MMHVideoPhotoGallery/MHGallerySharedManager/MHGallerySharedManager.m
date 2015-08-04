@@ -201,9 +201,40 @@
     return nil;
 }
 
+-(void)getVineURLforMediaPlayer:(NSString*)URL
+				   successBlock:(void (^)(NSURL *URL,NSError *error))succeedBlock{
+	
+	NSString *videoID = [[URL componentsSeparatedByString:@"/v/"] lastObject];
+	NSURL *videoInfoURL = [NSURL URLWithString:[NSString stringWithFormat:MHVineInfoBaseURL, videoID ?: @""]];
+	NSMutableURLRequest *httpRequest = [[NSMutableURLRequest alloc] initWithURL:videoInfoURL
+																	cachePolicy:NSURLRequestUseProtocolCachePolicy
+																timeoutInterval:10];
+	[httpRequest setValue:[self languageIdentifier] forHTTPHeaderField:@"Accept-Language"];
+	[NSURLConnection sendAsynchronousRequest:httpRequest
+									   queue:NSOperationQueue.new
+						   completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+							   /// @todo Maybe someday Vine allows direct video stream...
+							   /*
+								NSError *jsonError;
+							   NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data
+																						options:NSJSONReadingAllowFragments
+																						  error:&jsonError];
+							   NSURL *playURL = jsonData[];
+								*/
+							   NSURL *playURL = [NSURL URLWithString:URL];
+							   dispatch_async(dispatch_get_main_queue(), ^(void){
+								   if (playURL) {
+									   succeedBlock(playURL,nil);
+								   }else{
+									   succeedBlock(nil,nil);
+								   }
+							   });
+						   }];
+}
+
 -(void)getURLForMediaPlayer:(NSString*)URLString
                successBlock:(void (^)(NSURL *URL,NSError *error))succeedBlock{
-    
+	
     if ([URLString rangeOfString:@"vimeo.com"].location != NSNotFound) {
         [self getVimeoURLforMediaPlayer:URLString successBlock:^(NSURL *URL, NSError *error) {
             succeedBlock(URL,error);
@@ -212,6 +243,10 @@
         [self getYoutubeURLforMediaPlayer:URLString successBlock:^(NSURL *URL, NSError *error) {
             succeedBlock(URL,error);
         }];
+	}else if([URLString rangeOfString:@"vine.co"].location != NSNotFound) {
+		[self getVineURLforMediaPlayer:URLString successBlock:^(NSURL *URL, NSError *error) {
+			succeedBlock(URL,error);
+		}];
     }else{
         succeedBlock([NSURL URLWithString:URLString],nil);
     }
@@ -399,6 +434,53 @@
     
 }
 
+-(void)getVineThumbImage:(NSString*)URL
+			successBlock:(void (^)(UIImage *image,NSUInteger videoDuration,NSError *error))succeedBlock{
+	UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:URL];
+	if (image) {
+		NSMutableDictionary *dict = [self durationDict];
+		succeedBlock(image,[dict[URL] integerValue],nil);
+	}else{
+		NSString *videoID = [[URL componentsSeparatedByString:@"/v/"] lastObject];
+		NSString *infoURL = [NSString stringWithFormat:MHYoutubeInfoBaseURL,videoID];
+		NSMutableURLRequest *httpRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:infoURL]
+																   cachePolicy:NSURLRequestUseProtocolCachePolicy
+															   timeoutInterval:10];
+		[NSURLConnection sendAsynchronousRequest:httpRequest
+										   queue:NSOperationQueue.new
+							   completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+								   if (!connectionError) {
+									   NSError *error;
+									   NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data
+																								options:NSJSONReadingAllowFragments
+																								  error:&error];
+									   dispatch_async(dispatch_get_main_queue(), ^(void){
+										   if (jsonData.count) {
+											   NSMutableDictionary *dictToSave = [self durationDict];
+											   dictToSave[URL] = @(6);
+											   [self setObjectToUserDefaults:dictToSave];
+											   NSString *thumbURL = jsonData[@"thumbnail_url"];
+											   [SDWebImageManager.sharedManager downloadImageWithURL:[NSURL URLWithString:thumbURL]
+																							 options:SDWebImageContinueInBackground
+																							progress:nil
+																						   completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+																							   
+																							   [SDImageCache.sharedImageCache removeImageForKey:thumbURL];
+																							   [SDImageCache.sharedImageCache storeImage:image
+																																  forKey:URL];
+																							   
+																							   succeedBlock(image,6,nil);
+																						   }];
+										   }
+									   });
+								   }else{
+									   succeedBlock(nil,0,connectionError);
+								   }
+							   }];
+	}
+	
+}
+
 -(void)startDownloadingThumbImage:(NSString*)urlString
                      successBlock:(void (^)(UIImage *image,NSUInteger videoDuration,NSError *error))succeedBlock{
     if ([urlString rangeOfString:@"vimeo.com"].location != NSNotFound) {
@@ -411,6 +493,11 @@
                       successBlock:^(UIImage *image, NSUInteger videoDuration, NSError *error) {
                           succeedBlock(image,videoDuration,error);
                       }];
+	}else if([urlString rangeOfString:@"vine.co"].location != NSNotFound) {
+		[self getVineThumbImage:urlString
+				   successBlock:^(UIImage *image, NSUInteger videoDuration, NSError *error) {
+						  succeedBlock(image,videoDuration,error);
+					  }];
     }else{
         [self createThumbURL:urlString
                 successBlock:^(UIImage *image, NSUInteger videoDuration, NSError *error) {

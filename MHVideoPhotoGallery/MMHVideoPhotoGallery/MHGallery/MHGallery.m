@@ -10,6 +10,8 @@ NSString * const MHYoutubeInfoBaseURL      = @"http://gdata.youtube.com/feeds/ap
 NSString * const MHVimeoThumbBaseURL       = @"http://vimeo.com/api/v2/video/%@.json";
 NSString * const MHVimeoVideoBaseURL       = @"http://player.vimeo.com/video/%@/config";
 NSString * const MHVimeoBaseURL            = @"http://vimeo.com/%@";
+NSString * const MHVineInfoBaseURL         = @"https://vine.co/oembed.json?id=%@";
+NSString * const MHVineBaseURL             = @"https://vine.co/v/%@";
 NSString * const MHGalleryViewModeShare    = @"MHGalleryViewModeShare";
 NSString * const MHAssetLibrary            = @"assets-library";
 NSString * const MHGalleryDurationData     = @"MHGalleryData";
